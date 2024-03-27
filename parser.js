@@ -52,6 +52,7 @@ class Parser {
       this.skip("<");
       const tagName = this.readWhileMatching(/[a-z]/);
       const attributes = this.parseAttributeList();
+
       this.skip(">");
 
       const endTag = `</${tagName}>`;
@@ -71,7 +72,8 @@ class Parser {
     const attributes = [];
     this.skipWhitespace();
     while (!this.match(">")) {
-      attributes.push(this.parseAttribute());
+      const attribute = this.parseAttribute();
+      attributes.push(attribute);
       this.skipWhitespace();
     }
     return attributes;
@@ -83,7 +85,7 @@ class Parser {
     const value = this.parseJavaScript();
     this.skip("}");
     return {
-      type: "Atrribute",
+      type: "Attribute",
       name,
       value,
     };
@@ -133,7 +135,10 @@ class Parser {
 
   readWhileMatching(regex) {
     let startIndex = this.index;
-    while (regex.test(this.content[this.index])) {
+    while (
+      this.index < this.content.length &&
+      regex.test(this.content[this.index])
+    ) {
       this.index++;
     }
     return this.content.slice(startIndex, this.index);
