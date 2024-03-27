@@ -80,7 +80,7 @@ class Parser {
   parseAttribute() {
     const name = this.readWhileMatching(/[^=]/);
     this.skip("={");
-    const value = this.parseJavascript();
+    const value = this.parseJavaScript();
     this.skip("}");
     return {
       type: "Atrribute",
